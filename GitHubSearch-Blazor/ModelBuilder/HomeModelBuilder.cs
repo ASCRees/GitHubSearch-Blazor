@@ -1,19 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 //using AutoMapper;
 using GitHubMemberSearch.Models;
 using GitHubMemberSearch.Service.Exceptions;
 using GitHubMemberSearch.Services.Models;
+using GitHubSearch_Blazor.Pages;
+using GitHubSearch_Blazor.Profiles;
 using Microsoft.Extensions.Configuration;
 
 namespace GitHubMemberSearch.ModelBuilders
 {
     public class HomeModelBuilder : IHomeModelBuilder
     {
+        public Search SearchObj { get; set; }
+        private IMapper _mapper;
+
         IConfiguration _configuration;
         public HomeModelBuilder(IConfiguration configuration)
         {
             _configuration = configuration;
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddProfile<GitHubUserViewModelProfile>();
+            });
+            _mapper = config.CreateMapper();
         }
  
 
@@ -26,50 +37,48 @@ namespace GitHubMemberSearch.ModelBuilders
                                 _configuration["UsersUrl"];
 
             //HomeController.Log.Info($"Request for details of \"{userNameSearch}\"");
-            //string defaultUrl = System.Configuration.ConfigurationManager.AppSettings["RootUrl"] +
-            //                    System.Configuration.ConfigurationManager.AppSettings["UsersUrl"];
             if (!string.IsNullOrEmpty(userNameSearch))
             {
-                //try
-                //{
-                //    GitHubUserServiceModel gitHubUserServiceModel =
-                //        await HomeControllerObj.CallGitHubService.CallUserApi(string.Format(defaultUrl, userNameSearch));
-                //    if (gitHubUserServiceModel != null)
-                //    {
-                //        gitHubUserViewModel = Mapper.Map<GitHubUserViewModel>(gitHubUserServiceModel);
+                try
+                {
+                        GitHubUserServiceModel gitHubUserServiceModel =
+                            await SearchObj.CallGitHubService.CallUserApi(string.Format(defaultUrl, userNameSearch));
+                    if (gitHubUserServiceModel != null)
+                    {
+                        gitHubUserViewModel = _mapper.Map<GitHubUserViewModel>(gitHubUserServiceModel);
 
-                //        if (gitHubUserViewModel.id > 0)
-                //        {
-                //            List<GitHubUserReposServiceModelItem> gitHubUserReposServiceModelItem =
-                //                await HomeControllerObj.CallGitHubService.CallUserReposApi(gitHubUserViewModel.repos_url);
-                //            if (gitHubUserReposServiceModelItem != null)
-                //            {
-                //                if (gitHubUserReposServiceModelItem.Count > 0)
-                //                {
-                //                    gitHubUserViewModel.reposItems =
-                //                        Mapper.Map<List<GitHubUserReposServiceModelItem>, List<GitHubUserReposViewModelItem>>(
-                //                            gitHubUserReposServiceModelItem);
-                //                }
-                //            }
-                //        }
-                //    }
-                //    else
-                //    {
-                //        string noRecordsFound = $"No records found for user \"{userNameSearch}\"";
-                //        HomeController.Log.Warn(noRecordsFound);
-                //        gitHubUserViewModel.message = noRecordsFound;
-                //    }
-                //}
-                //catch (HttpResponseException ex)
-                //{
-                //    string noRecordsFound = $"No records found for user \"{userNameSearch}\"";
-                //    HomeController.Log.Warn(noRecordsFound);
-                //    gitHubUserViewModel.message = noRecordsFound;
-                //}
-                //catch
-                //{
-                //    throw;
-                //}
+                        if (gitHubUserViewModel.id > 0)
+                        {
+                            List<GitHubUserReposServiceModelItem> gitHubUserReposServiceModelItem =
+                                await SearchObj.CallGitHubService.CallUserReposApi(gitHubUserViewModel.repos_url);
+                            if (gitHubUserReposServiceModelItem != null)
+                            {
+                                if (gitHubUserReposServiceModelItem.Count > 0)
+                                {
+                                    //gitHubUserViewModel.reposItems =
+                                    //    Mapper.Map<List<GitHubUserReposServiceModelItem>, List<GitHubUserReposViewModelItem>>(
+                                    //        gitHubUserReposServiceModelItem);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string noRecordsFound = $"No records found for user \"{userNameSearch}\"";
+                      //  HomeController.Log.Warn(noRecordsFound);
+                        gitHubUserViewModel.message = noRecordsFound;
+                    }
+                }
+                catch (HttpResponseException ex)
+                {
+                    string noRecordsFound = $"No records found for user \"{userNameSearch}\"";
+                    //HomeController.Log.Warn(noRecordsFound);
+                    gitHubUserViewModel.message = noRecordsFound;
+                }
+                catch
+                {
+                    throw;
+                }
             }
 
             return gitHubUserViewModel;

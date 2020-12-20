@@ -30,6 +30,7 @@ namespace GitHubSearch_Blazor.Pages
         {
             var g = GitHubService;
             var h = HomeBuilder;
+            HomeBuilder.SearchObj = this;
             editContext = new EditContext(searchModel);
             editContext.OnFieldChanged += HandleFieldChanged;
             var rootUrl = Configuration["RootUrl"];

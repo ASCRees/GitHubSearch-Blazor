@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using GitHubMemberSearch.ModelBuilders;
 using GitHubMemberSearch.Service.Helper;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 
 namespace GitHubSearch_Blazor
 {
@@ -42,6 +43,8 @@ namespace GitHubSearch_Blazor
                 return new HomeModelBuilder(configuration);
             }
             );
+            services.AddAutoMapper(typeof(Startup));
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
