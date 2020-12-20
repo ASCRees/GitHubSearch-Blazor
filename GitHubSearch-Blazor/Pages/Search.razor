@@ -1,0 +1,18 @@
+﻿@page "/search"
+
+
+    <h3>Search</h3>
+
+    <EditForm EditContext="@editContext" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        @*<ValidationSummary />*@
+
+        <InputText id="userNameSearch" @bind-Value="searchModel.UserNameSearch" />
+        <ValidationMessage For="@(() => searchModel.UserNameSearch)" />
+
+        <button type="submit" disabled="@formInvalid">Submit</button>
+        <div class="userNameErrorDiv">
+
+        </div>
+    </EditForm>
+
