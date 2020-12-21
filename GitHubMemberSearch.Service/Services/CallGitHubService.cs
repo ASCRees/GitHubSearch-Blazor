@@ -22,8 +22,9 @@
             {
                 return _httpHandler.HttpCallClient<GitHubUserServiceModel>(userUrl).GetAwaiter().GetResult();
             }
-            catch
+            catch (System.Exception ex)
             {
+                var exce = ex;
                 throw;
             }
         }

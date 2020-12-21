@@ -55,9 +55,9 @@ namespace GitHubMemberSearch.ModelBuilders
                             {
                                 if (gitHubUserReposServiceModelItem.Count > 0)
                                 {
-                                    //gitHubUserViewModel.reposItems =
-                                    //    Mapper.Map<List<GitHubUserReposServiceModelItem>, List<GitHubUserReposViewModelItem>>(
-                                    //        gitHubUserReposServiceModelItem);
+                                    gitHubUserViewModel.reposItems =
+                                        _mapper.Map<List<GitHubUserReposServiceModelItem>, List<GitHubUserReposViewModelItem>>(
+                                            gitHubUserReposServiceModelItem);
                                 }
                             }
                         }

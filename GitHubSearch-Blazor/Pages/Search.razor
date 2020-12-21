@@ -1,18 +1,88 @@
 ﻿@page "/search"
 
 
-    <h3>Search</h3>
+<h3>Search</h3>
 
-    <EditForm EditContext="@editContext" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        @*<ValidationSummary />*@
+<EditForm EditContext="@editContext" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @*<ValidationSummary />*@
 
-        <InputText id="userNameSearch" @bind-Value="searchModel.UserNameSearch" />
-        <ValidationMessage For="@(() => searchModel.UserNameSearch)" />
+    <InputText id="userNameSearch" @bind-Value="searchModel.UserNameSearch" />
+    <ValidationMessage For="@(() => searchModel.UserNameSearch)" />
 
-        <button type="submit" disabled="@formInvalid">Submit</button>
-        <div class="userNameErrorDiv">
+    <button type="submit" disabled="@formInvalid">Submit</button>
+    <div class="userNameErrorDiv">
 
-        </div>
-    </EditForm>
+    </div>
+</EditForm>
+
+@if (@searchModel.UserViewModel != null)
+{
+    if (@searchModel.UserViewModel[0].id > 0)
+    {
+        foreach (var user in @searchModel.UserViewModel)
+        {
+            <br />
+            <br />
+            <table class="table" id="userDetailsTable">
+                <tr>
+                    <th>Name</th>
+                    <td>@user.name</td>
+                </tr>
+                <tr>
+                    <th>Location</th>
+                    <td>@user.location</td>
+                </tr>
+                <tr>
+                    <th>Avatar</th>
+                    <td><img src="@(user.avatar_url)" height="100px;" /></td>
+                </tr>
+            </table>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Full Name</th>
+                        <th>Description</th>
+                        <th>Stargazers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (user.reposItems.Count.Equals(0))
+                    {
+                        <tr>
+                            <td colspan="4" style="color:red">
+                                The user does not have any repository items
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in user.reposItems)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@(item.html_url)" target="_blank">@item.name</a>
+                                </td>
+                                <td>@item.full_name</td>
+                                <td>@item.description</td>
+                                <td>@item.stargazers_count</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    }
+    else if (!string.IsNullOrWhiteSpace(@searchModel.UserViewModel[0].message))
+    {
+        <br />
+        <table class="table" id="userDetailsTable">
+            <tr>
+                <td style="color:red">@searchModel.UserViewModel[0].message</td>
+            </tr>
+        </table>
+
+    }
+}
 

@@ -10,6 +10,7 @@ namespace GitHubSearch_Blazor.Profiles
         public GitHubUserViewModelProfile()
         {
             CreateMap<GitHubUserServiceModel, GitHubUserViewModel>();
+            CreateMap<GitHubUserReposServiceModelItem, GitHubUserReposViewModelItem>();
         }
     }
 }

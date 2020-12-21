@@ -21,16 +21,16 @@ namespace GitHubSearch_Blazor.Pages
         private GitHubUserViewSearchModel searchModel = new GitHubUserViewSearchModel();
 
         //internal static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(HomeController));
-        internal readonly ICallGitHubService CallGitHubService;
-        private readonly IHomeModelBuilder _homeModelBuilder;
+        internal ICallGitHubService CallGitHubService;
+       // private readonly IHomeModelBuilder _homeModelBuilder;
 
         private bool formInvalid = true;
         private EditContext editContext;
         protected override void OnInitialized()
         {
-            var g = GitHubService;
-            var h = HomeBuilder;
+          //  var CallGitHubService = GitHubService;
             HomeBuilder.SearchObj = this;
+            HomeBuilder.SearchObj.CallGitHubService = GitHubService;
             editContext = new EditContext(searchModel);
             editContext.OnFieldChanged += HandleFieldChanged;
             var rootUrl = Configuration["RootUrl"];
@@ -56,10 +56,14 @@ namespace GitHubSearch_Blazor.Pages
                 var gitHubUserViewModel = HomeBuilder.BuildSearchViewModel(userNameSearch).GetAwaiter().GetResult();
                 if (!string.IsNullOrWhiteSpace(userNameSearch))
                 {
-                    gitHubUserViewSearchModel.UserViewModel = new List<GitHubUserViewModel>
+                    searchModel.UserViewModel = new List<GitHubUserViewModel>
                     {
                         gitHubUserViewModel
                     };
+                    //gitHubUserViewSearchModel.UserViewModel = new List<GitHubUserViewModel>
+                    //{
+                    //    gitHubUserViewModel
+                    //};
                 }
 
             }
