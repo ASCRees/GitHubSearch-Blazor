@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -7,14 +8,28 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.UI;
 
 namespace GitMemberSearch.FunctionalTests
 {
     [ExcludeFromCodeCoverage]
 
+    [TestFixture("Chrome")]
+    [TestFixture("FireFox")]
     public class BaseFunctionalTests
     {
-        public IWebDriver driver = new ChromeDriver();
+        public IWebDriver driver = null;
+        protected string webDriverName = string.Empty;
+        public WebDriverWait waitDriver = null;
+
+        public string GitHubURL
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["TestSiteUrl"] + ConfigurationManager.AppSettings["TestSiteURLExtension"];
+            }
+        }
 
         public IWebElement SearchField 
         { 
@@ -28,7 +43,7 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.Name("Search"));
+                return driver.FindElement(By.Id("Search"));
             }
         }
 
@@ -83,6 +98,20 @@ namespace GitMemberSearch.FunctionalTests
         [OneTimeSetUp]
         public void Open()
         {
+            string browser = string.Empty;
+
+            switch (webDriverName)
+            {
+                case "Chrome":
+                    driver = new ChromeDriver();
+                    break;
+
+                case "FireFox":
+                    driver = new FirefoxDriver();
+                    break;
+
+            }
+            
             driver.Manage().Window.Maximize();
         }
 
@@ -90,8 +119,11 @@ namespace GitMemberSearch.FunctionalTests
         [SetUp]
         public void ReloadPage()
         {
-            driver.Url = "http://localhost/GitSearch";
+            waitDriver = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            driver.Url = ConfigurationManager.AppSettings["TestSiteUrl"];
         }
+        
+
 
         [OneTimeTearDown]
         public void Close()

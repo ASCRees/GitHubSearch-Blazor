@@ -5,10 +5,14 @@ using System.Diagnostics.CodeAnalysis;
 namespace GitMemberSearch.FunctionalTests
 {
     [ExcludeFromCodeCoverage]
-
-    [TestFixture]
     public class WebPageFunctionalTests:BaseFunctionalTests
     {
+
+        public WebPageFunctionalTests(string webDriverName)
+        {
+            this.webDriverName = webDriverName;
+        }
+
         [Test]
         public void WebPage_EmptyUserName_Check_Field_Error_Is_Shown()
         {

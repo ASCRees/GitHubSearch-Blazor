@@ -15,20 +15,18 @@ namespace GitHubSearch_Blazor.Pages
     {
         [Inject] ICallGitHubService GitHubService { get; set; }
         [Inject] IHomeModelBuilder HomeBuilder { get; set; }
-
+        [Inject] NavigationManager Navigation { get; set; }
         [Inject] IConfiguration Configuration { get; set; }
 
         private GitHubUserViewSearchModel searchModel = new GitHubUserViewSearchModel();
 
         //internal static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(HomeController));
         internal ICallGitHubService CallGitHubService;
-       // private readonly IHomeModelBuilder _homeModelBuilder;
 
         private bool formInvalid = true;
         private EditContext editContext;
         protected override void OnInitialized()
         {
-          //  var CallGitHubService = GitHubService;
             HomeBuilder.SearchObj = this;
             HomeBuilder.SearchObj.CallGitHubService = GitHubService;
             editContext = new EditContext(searchModel);
@@ -45,32 +43,24 @@ namespace GitHubSearch_Blazor.Pages
 
         private void HandleValidSubmit()
         {
-
-            var userNameSearch = searchModel.UserNameSearch;
-            var end = "Stop";
-
-
-            GitHubUserViewSearchModel gitHubUserViewSearchModel = HomeModelBuilder.GetUserViewSearchModel(userNameSearch);
+            GitHubUserViewSearchModel gitHubUserViewSearchModel = HomeModelBuilder.GetUserViewSearchModel(searchModel.UserNameSearch);
             try
             {
-                var gitHubUserViewModel = HomeBuilder.BuildSearchViewModel(userNameSearch).GetAwaiter().GetResult();
-                if (!string.IsNullOrWhiteSpace(userNameSearch))
+                var gitHubUserViewModel = HomeBuilder.BuildSearchViewModel(searchModel.UserNameSearch).GetAwaiter().GetResult();
+                if (!string.IsNullOrWhiteSpace(searchModel.UserNameSearch))
                 {
                     searchModel.UserViewModel = new List<GitHubUserViewModel>
                     {
                         gitHubUserViewModel
                     };
-                    //gitHubUserViewSearchModel.UserViewModel = new List<GitHubUserViewModel>
-                    //{
-                    //    gitHubUserViewModel
-                    //};
+
                 }
 
             }
             catch (Exception ex)
             {
                 //Log.Error(ex);
-                //return Redirect("~/ErrorHandler");
+                Navigation.NavigateTo( "/error");
             }
         }
 

@@ -45,7 +45,7 @@ namespace GitHubMemberSearch.UnitTests
             {
                 Id = 1,
                 login = userName,
-                avatarUrl = $"http://api.github.com/ {userName}.jpg",
+                avatar_url = $"http://api.github.com/ {userName}.jpg",
                 name = userName,
                 location = "London",
                 repos_url = "http://api.github.com/repos/" + userName

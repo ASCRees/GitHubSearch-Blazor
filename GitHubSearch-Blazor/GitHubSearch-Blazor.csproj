@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>GitHubSearch_Blazor</RootNamespace>
+    <UserSecretsId>75e77464-6f8e-44b4-b4de-a3ef161a1369</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

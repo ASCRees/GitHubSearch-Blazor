@@ -7,10 +7,10 @@
     <DataAnnotationsValidator />
     @*<ValidationSummary />*@
 
-    <InputText id="userNameSearch" @bind-Value="searchModel.UserNameSearch" />
+    <InputText DisplayName="" id="userName" @bind-Value="searchModel.UserNameSearch" />
     <ValidationMessage For="@(() => searchModel.UserNameSearch)" />
 
-    <button type="submit" disabled="@formInvalid">Submit</button>
+    <button type="submit" id="Search" disabled="@formInvalid">Search</button>
     <div class="userNameErrorDiv">
 
     </div>
@@ -35,7 +35,7 @@
                 </tr>
                 <tr>
                     <th>Avatar</th>
-                    <td><img src="@(user.avatar_url)" height="100px;" /></td>
+                    <td><img src="@user.avatar_url" height="100px;" /></td>
                 </tr>
             </table>
             <table class="table table-striped">
