@@ -17,7 +17,9 @@ namespace GitMemberSearch.FunctionalTests
         public void WebPage_EmptyUserName_Check_Field_Error_Is_Shown()
         {
             //Arrange
-            SearchField.SendKeys("");
+            SearchField.SendKeys(".");
+
+            SearchField.SendKeys(Keys.Tab);
 
             //Act
             SearchButton.Click();
@@ -31,12 +33,13 @@ namespace GitMemberSearch.FunctionalTests
         {
             //Arrange
             SearchField.SendKeys("ascrees");
+            SearchField.SendKeys(Keys.Tab);
 
             //Act
             SearchButton.Click();
 
             //Assert
-            Assert.IsTrue(driver.FindElements(By.Id("userName-error")).Count == 0);
+            Assert.IsTrue(ErrorLabel == null);
         }
 
         [Test]
@@ -44,12 +47,13 @@ namespace GitMemberSearch.FunctionalTests
         {
             //Arrange
             SearchField.SendKeys("...");
+            SearchField.SendKeys(Keys.Tab);
 
             //Act
             SearchButton.Click();
 
             //Assert
-            Assert.IsTrue(SearchError.Text.Contains("No records found for user"));
+            Assert.IsTrue(ErrorLabel.Text.Contains("No records found for user"));
         }
 
 
@@ -58,6 +62,7 @@ namespace GitMemberSearch.FunctionalTests
         {
             //Arrange
             SearchField.SendKeys("ascrees");
+            SearchField.SendKeys(Keys.Tab);
 
             //Act
             SearchButton.Click();
@@ -71,6 +76,7 @@ namespace GitMemberSearch.FunctionalTests
         {
             //Arrange
             SearchField.SendKeys("speacock1970");
+            SearchField.SendKeys(Keys.Tab);
 
             //Act
             SearchButton.Click();
@@ -84,36 +90,27 @@ namespace GitMemberSearch.FunctionalTests
         {
             //Arrange
             SearchField.SendKeys("ascrees");
+            SearchField.SendKeys(Keys.Tab);
 
             //Act
             SearchButton.Click();
 
             //Assert
-            Assert.IsTrue(!NoRepositoryItems.Text.Contains("The user does not have any repository items"));
+            Assert.IsTrue(NoRepositoryItems==null);
         }
 
-        [Test]
-        public void WebPage_Display_Error_Page_For_Invalid_Request()
-        {
-            //Arrange
-            //Act
-            driver.Url = "http://localhost/GitSearch/Home/Search?id=1";
-
-
-            //Assert
-            Assert.IsTrue(ErrorPageText.Text.Contains("Error."));
-        }
 
         [Test]
         public void WebPage_Display_Error_For_Long_UserName()
         {
             //Arrange
-            SearchField.SendKeys("abcdefghjkabcdefghjkabcdefghjkabcdefghjk");
+            SearchField.SendKeys("abcdefghjkabcdefghjkabcdefghjkabcdeslajfsldkjfsldkjfsdasdfghjk");
+            SearchField.SendKeys(Keys.Tab);
             //Act
 
 
             //Assert
-            Assert.IsTrue(BadUserNameInputMessage.Text.Contains("Username can only be a max of 39 characters"));
+            Assert.IsTrue(BadUserNameInputMessage.Text.Contains("Search too long"));
         }
 
     }
