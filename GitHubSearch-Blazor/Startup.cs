@@ -1,21 +1,13 @@
-using GitHubMemberSearch.Services;
+using AutoMapper;
+using GitHubMemberSearch.ModelBuilders;
+using GitHubMemberSearch.Service.Helper;
 using GitHubMemberSearch.Service.Interfaces;
-using GitHubSearch_Blazor.Data;
+using GitHubMemberSearch.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GitHubMemberSearch.ModelBuilders;
-using GitHubMemberSearch.Service.Helper;
-using Microsoft.AspNetCore.Identity;
-using AutoMapper;
 
 namespace GitHubSearch_Blazor
 {
@@ -34,7 +26,6 @@ namespace GitHubSearch_Blazor
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<IHttpHandler, HttpHandler>();
             services.AddSingleton<ICallGitHubService,CallGitHubService>();
             services.AddSingleton<IHomeModelBuilder, HomeModelBuilder>(param =>

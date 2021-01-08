@@ -35,7 +35,7 @@ namespace GitMemberSearch.FunctionalTests
         { 
             get 
             {
-                return driver.FindElement(By.Id("userName"));
+                return FindElementBy(By.Id("userName"));
             } 
         }
 
@@ -43,7 +43,7 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.Id("Search"));
+                return FindElementBy(By.Id("Search"));
             }
         }
 
@@ -51,7 +51,7 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.Id("userName-error"));
+                return FindElementBy(By.Id("userName-error"));
             }
         }
 
@@ -59,7 +59,8 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.XPath("//*[@id='userDetailsTable']/tbody/tr[1]/th"));
+                
+                return FindElementBy(By.XPath("//*[@id='userDetailsTable']/tr[1]/th"));
             }
         }
 
@@ -67,7 +68,7 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.XPath("//*[@id='userDetailsTable']/tbody/tr/td"));
+                return FindElementBy(By.XPath("//*[@id='userDetailsTable']/tbody/tr/td"));
             }
         }
 
@@ -75,7 +76,8 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.XPath("/html/body/div[2]/table[2]/tbody/tr/td"));
+                
+                return FindElementBy(By.XPath("/html/body/app/div[2]/div[2]/table[2]/tbody/tr/td"));
             }
         }
 
@@ -83,7 +85,7 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.XPath("/html/body/div[2]/hgroup/h1"));
+                return FindElementBy(By.XPath("/html/body/div[2]/hgroup/h1"));
             }
         }
 
@@ -91,7 +93,21 @@ namespace GitMemberSearch.FunctionalTests
         {
             get
             {
-                return driver.FindElement(By.ClassName("userNameErrorDiv"));
+                return FindElementBy(By.ClassName("validation-message"));
+            }
+        }
+
+        public IWebElement FindElementBy(By by)
+        {
+            try
+            {
+                IWebElement findElement = waitDriver.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by));
+
+                return findElement;
+            }
+            catch
+            {
+                return null;
             }
         }
 
@@ -131,5 +147,16 @@ namespace GitMemberSearch.FunctionalTests
             driver.Close();
             driver.Dispose();
         }
+
+        #region Helpers
+        /// <summary>
+        /// Sets the time for the implicit wait for the current instance
+        /// </summary>
+        /// <param name="seconds">The seconds to set the wait</param>
+        protected void SetImplicitWait(double seconds)
+        {
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(seconds);
+        }
+        #endregion
     }
 }
